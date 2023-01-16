@@ -1,0 +1,22 @@
+{
+  "name": "chadgpt",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "commander": "^10.0.0",
+    "irc-framework": "^4.12.1",
+    "openai": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "prettier": "2.8.3"
+  }
+}
