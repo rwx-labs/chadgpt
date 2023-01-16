@@ -11,6 +11,4 @@ RUN npm install --omit=dev --ignore-scripts
 
 COPY ./config.json index.js .
 
-ENV OPENAI_API_KEY
-
 CMD ["index.js"]
