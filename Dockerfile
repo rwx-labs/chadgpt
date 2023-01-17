@@ -9,6 +9,6 @@ COPY --chown=node:node ./package.json ./package-lock.json .
 
 RUN npm install --omit=dev --ignore-scripts
 
-COPY ./config.json index.js .
+ADD . .
 
 CMD ["index.js"]

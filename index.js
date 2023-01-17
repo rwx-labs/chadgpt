@@ -6,7 +6,7 @@ import YAML from "yaml";
 import { Client } from "irc-framework";
 import OpenAI, { OpenAIApi } from "openai";
 
-import logging from "./logging.js";
+import logging from "./chadgpt/logging.js";
 
 const logger = logging.createLogger("chadgpt");
 const configPath = path.join(process.cwd(), "config.yaml");
