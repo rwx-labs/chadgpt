@@ -1,9 +1,0 @@
-{
-  "host": "irc.rwx.im",
-  "port": 6697,
-  "tls": true,
-  "nick": "chad",
-  "username": "chad",
-  "version": "github.com/rwx-labs/chadgpt",
-  "channels": ["#chad", "#uplink"]
-}

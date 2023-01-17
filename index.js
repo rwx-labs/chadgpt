@@ -1,76 +1,95 @@
 import fs from "node:fs/promises";
+import path from "node:path";
+
+import Mustache from "mustache";
+import YAML from "yaml";
 import { Client } from "irc-framework";
-import { OpenAIApi, Configuration } from "openai";
-import { program } from "commander";
+import OpenAI, { OpenAIApi } from "openai";
 
-const config = await fs.readFile("./config.json").then(JSON.parse);
+import logging from "./logging.js";
 
-const client = new Client();
-const openai = new OpenAIApi(new Configuration({
-    apiKey: process.env.OPENAI_API_KEY
-}));
+const logger = logging.createLogger("chadgpt");
+const configPath = path.join(process.cwd(), "config.yaml");
 
-const HIGHLIGHTED_MESSAGE = new RegExp(`^${config.nick}[,:] (?<msg>.*)`);
-const PROMPT = `
-Q: Who is Batman?
-A: Batman is a fictional comic book character.
+logger.debug("Loading configuration file `%s'", configPath);
+const config = await fs.readFile(configPath, "utf8").then(YAML.parse);
+logger.debug("Loaded configuration file");
 
-Q: What is torsalplexity?
-A: ?
+// Set up the IRC client
+const ircConfig = config["irc"];
+const client = new Client(ircConfig);
 
-Q: What is Devz9?
-A: ?
+// Set op tne OpenAI API client
+const openaiConfig = config["openai"];
+const openai = new OpenAIApi(
+  new OpenAI.Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+);
 
-Q: Who is George Lucas?
-A: George Lucas is American film director and producer famous for creating Star Wars.
+let HIGHLIGHTED_MESSAGE;
 
-Q: What is the capital of California?
-A: Sacramento.
+client.on("message", function (event) {
+  logger.debug("%o", event);
+});
 
-Q: What orbits the Earth?
-A: The Moon.
+client.on("nick in use", function (event) {
+  const newNick = event.nick.concat("_");
 
-Q: Who is Fred Rickerson?
-A: ?
+  logger.info(
+    `Nick \`${event.nick}' is already in use - switching to \`${newNick}'`
+  );
+  ircConfig.nick = newNick;
+  client.changeNick(newNick);
+});
 
-Q: What is an atom?
-A: An atom is a tiny particle that makes up everything.
+client.on("registered", function (event) {
+  logger.info("Connected and registered with nick `%s'", event.nick);
 
-Q: Who is Alvan Muntz?
-A: ?
+  ircConfig.nick = event.nick;
 
-Q: What is Kozar-09?
-A: ?
+  HIGHLIGHTED_MESSAGE = new RegExp(`^${ircConfig.nick}[,:] (?<msg>.*)`);
 
-Q: How many moons does Mars have?
-A: Two, Phobos and Deimos.
-`;
+  for (const channel of ircConfig.channels) {
+    logger.info(`Joining channel \`${channel}'`);
 
-console.log(HIGHLIGHTED_MESSAGE);
-
-client.on('registered', function(_evt) {
-  for (const channel of config.channels) {
     client.join(channel);
   }
 });
 
-client.on('privmsg', function(event) {
+client.on("privmsg", function (event) {
   const result = event.message.match(HIGHLIGHTED_MESSAGE);
 
   if (result) {
     const msg = result[1];
-    const prompt = `${PROMPT}\n\nQ: ${msg}\nA:`;
-    const completion = (async () => await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: prompt,
-      temperature: 0,
-      max_tokens: 60,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0,
-    }))();
+    const {
+      model,
+      prompt,
+      temperature,
+      max_tokens,
+      top_p,
+      frequency_penalty,
+      presence_penalty,
+    } = openaiConfig;
+    const templatedPrompt = Mustache.render(prompt, {
+      nick: event.nick,
+      channel: event.target,
+      message: msg,
+      rawMessage: event.message,
+    });
+    logger.debug("Requesting completion using prompt: %o", templatedPrompt);
+    const completion = (async () =>
+      await openai.createCompletion({
+        model,
+        prompt: templatedPrompt,
+        temperature,
+        max_tokens,
+        top_p,
+        frequency_penalty,
+        presence_penalty,
+      }))();
 
-    completion.then(function(c) {
+    completion.then(function (c) {
       const choices = c.data.choices;
 
       if (choices.length > 0) {
@@ -81,7 +100,7 @@ client.on('privmsg', function(event) {
       console.log(event, completion);
     });
   }
-
 });
 
-client.connect(config);
+logger.info("Connecting to %s:%d ..", ircConfig["host"], ircConfig["port"]);
+client.connect();
