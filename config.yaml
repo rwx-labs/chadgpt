@@ -15,8 +15,8 @@ irc:
   # List of channels to join when initially connected.
   channels:
     - "#chad"
-    # - "#uplink"
-    # - "#omnigame"
+    - "#uplink"
+    - "#omnigame"
 
 # Configuration for the GPT completion requests.
 # Reference: https://beta.openai.com/docs/api-reference/completions
