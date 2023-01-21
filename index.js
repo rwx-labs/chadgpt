@@ -58,6 +58,11 @@ client.on("registered", function (event) {
 });
 
 client.on("privmsg", function (event) {
+  // Skip responding to ignored nicknames.
+  if (ircConfig['ignored_nicks'].includes(event.nick)) {
+    return;
+  }
+
   const result = event.message.match(HIGHLIGHTED_MESSAGE);
 
   if (result) {
