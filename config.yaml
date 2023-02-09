@@ -1,7 +1,7 @@
 ---
 irc:
   # The hostname or IP address of the IRC server.
-  host: irc.rwx.im
+  host: irc.example.com
   # The port number of the IRC server.
   port: 6697
   # Use a secure connection.
@@ -15,8 +15,8 @@ irc:
   # List of channels to join when initially connected.
   channels:
     - "#chad"
-    - "#uplink"
-    - "#omnigame"
+  # List of nicknames to ignore messages from.
+  ignored_nicks: []
 
 # Configuration for the GPT completion requests.
 # Reference: https://beta.openai.com/docs/api-reference/completions
