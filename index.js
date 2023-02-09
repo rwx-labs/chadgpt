@@ -9,7 +9,7 @@ import OpenAI, { OpenAIApi } from "openai";
 import logging from "./chadgpt/logging.js";
 
 const logger = logging.createLogger("chadgpt");
-const configPath = path.join(process.cwd(), "config.yaml");
+const configPath = process.env['CONFIG_PATH'] || path.join(process.cwd(), "config.yaml");
 
 logger.debug("Loading configuration file `%s'", configPath);
 const config = await fs.readFile(configPath, "utf8").then(YAML.parse);
