@@ -101,8 +101,14 @@ client.on("privmsg", function (event) {
         const choices = c.data.choices;
 
         if (choices.length > 0) {
-          console.log(choices[0].text);
-          client.say(event.target, `${event.nick}: ${choices[0].text.trim()}`);
+          let text = choices[0].text.trim();
+          console.log(text);
+
+          let lines = text.split("\n");
+
+          lines.forEach((line) => {
+            client.say(event.target, `${event.nick}: ${line}`);
+          });
         }
 
         console.log(event, completion);
