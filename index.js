@@ -59,7 +59,7 @@ client.on("registered", function (event) {
 
 client.on("privmsg", function (event) {
   // Skip responding to ignored nicknames.
-  if (ircConfig['ignored_nicks'].includes(event.nick)) {
+  if (ircConfig["ignored_nicks"].includes(event.nick)) {
     return;
   }
 
@@ -82,7 +82,9 @@ client.on("privmsg", function (event) {
       message: msg,
       rawMessage: event.message,
     });
+
     logger.debug("Requesting completion using prompt: %o", templatedPrompt);
+
     const completion = (async () =>
       await openai.createCompletion({
         model,
@@ -94,16 +96,20 @@ client.on("privmsg", function (event) {
         presence_penalty,
       }))();
 
-    completion.then(function (c) {
-      const choices = c.data.choices;
+    completion
+      .then(function (c) {
+        const choices = c.data.choices;
 
-      if (choices.length > 0) {
-        console.log(choices[0].text);
-        client.say(event.target, `${event.nick}: ${choices[0].text.trim()}`);
-      }
+        if (choices.length > 0) {
+          console.log(choices[0].text);
+          client.say(event.target, `${event.nick}: ${choices[0].text.trim()}`);
+        }
 
-      console.log(event, completion);
-    });
+        console.log(event, completion);
+      })
+      .catch((error) => {
+        client.say(event.target, `${event.nick}: OpenAI error: ${error.message}`);
+      });
   }
 });
 
