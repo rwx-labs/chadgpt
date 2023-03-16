@@ -43,12 +43,12 @@ openai:
   # Number between -2.0 and 2.0. Positive values penalize new tokens based on
   # whether they appear in the text so far, increasing the model's likelihood to
   # talk about new topics.
-  presence_penalty: 0.0
+  # presence_penalty: 0.0
 
   # Number between -2.0 and 2.0. Positive values penalize new tokens based on
   # their existing frequency in the text so far, decreasing the model's
   # likelihood to repeat the same line verbatim.
-  frequency_penalty: 0.5
+  # frequency_penalty: 0.5
 
   # List of messages used for instructing GPT.
   #
