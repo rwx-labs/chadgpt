@@ -25,4 +25,4 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 # Add the rest of the application
 ADD . .
 
-CMD ["bin/chadgpt.js"]
+ENTRYPOINT ["node", "bin/chadgpt.js"]
