@@ -4,11 +4,10 @@ const fs = require("fs/promises");
 const path = require("path");
 const process = require("process");
 
+const { Client } = require("irc-framework");
 const Mustache = require("mustache");
 const YAML = require("yaml");
-const { Client } = require("irc-framework");
 const OpenAI = require("openai");
-const OpenAIApi = OpenAI.OpenAIApi;
 
 const logging = require("../lib/logging.js");
 
@@ -27,7 +26,7 @@ const logging = require("../lib/logging.js");
 
   // Set op tne OpenAI API client
   const openaiConfig = config["openai"];
-  const openai = new OpenAIApi(
+  const openai = new OpenAI.OpenAIApi(
     new OpenAI.Configuration({
       apiKey: process.env.OPENAI_API_KEY,
     })
