@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "check-format": "prettier . --check --cache",
     "format": "prettier . --write --cache",
     "lint": "eslint . --cache --max-warnings=0 --ext .js,.mjs",
     "start": "node bin/chadgpt.js",
     "test": "jest",
-    "test-coverage": "jest --coverage"
+    "test-coverage": "jest --coverage",
+    "prepare": "husky install"
   },
   "author": "Mikkel Kroman <mk@maero.dk>",
   "bin": [
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "eslint": "^8.32.0",
+    "husky": "^8.0.0",
     "jest": "^29.5.0",
     "prettier": "2.8.3"
   },
