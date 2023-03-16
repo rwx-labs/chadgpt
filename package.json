@@ -3,12 +3,23 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier . --write --cache",
+    "lint": "eslint . --cache --max-warnings=0 --ext .js,.mjs",
+    "start": "node bin/chadgpt.js",
+    "test": "jest",
+    "test-coverage": "jest --coverage"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mikkel Kroman <mk@maero.dk>",
+  "bin": [
+    "bin/chadgpt.js"
+  ],
+  "license": "Apache-2.0",
+  "files": [
+    "bin/**/*.js",
+    "lib/**/*.js",
+    "!**/__tests__/**"
+  ],
   "dependencies": {
     "chalk": "^5.2.0",
     "commander": "^10.0.0",
@@ -20,6 +31,39 @@
   },
   "devDependencies": {
     "eslint": "^8.32.0",
+    "jest": "^29.5.0",
     "prettier": "2.8.3"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "jest": true
+    },
+    "extends": "eslint:recommended",
+    "overrides": [],
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    },
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
+  },
+  "jest": {
+    "clearMocks": true,
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "lib/**/*.js",
+      "!lib/**/{__tests__,testUtils}/**/*.js"
+    ],
+    "coverageDirectory": "./.coverage/",
+    "coverageReporters": [
+      "lcov",
+      "text-summary"
+    ]
   }
 }
