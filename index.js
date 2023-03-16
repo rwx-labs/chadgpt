@@ -118,10 +118,15 @@ client.on("privmsg", function (event) {
           console.log(text);
 
           let lines = text.split("\n");
+          const maxLines = 7;
 
-          lines.forEach((line) => {
+          lines.slice(0, maxLines).forEach((line) => {
             client.say(event.target, `${event.nick}: ${line}`);
           });
+
+          if (lines.length > maxLines) {
+            client.say(event.target, `${event.nick}: .. (${lines.length - maxLines} lines truncated from response)`);
+          }
         }
 
         console.log(event, completion);
