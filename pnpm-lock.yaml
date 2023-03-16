@@ -7,6 +7,8 @@ specifiers:
   husky: ^8.0.3
   irc-framework: ^4.13.1
   jest: ^29.5.0
+  lodash: ^4.17.21
+  marked: ^4.2.12
   mustache: ^4.2.0
   openai: ^3.2.1
   prettier: 2.8.3
@@ -17,6 +19,8 @@ dependencies:
   chalk: 5.2.0
   commander: 10.0.0
   irc-framework: 4.13.1
+  lodash: 4.17.21
+  marked: 4.2.12
   mustache: 4.2.0
   openai: 3.2.1
   winston: 3.8.2
@@ -2436,6 +2440,12 @@ packages:
     dependencies:
       tmpl: 1.0.5
     dev: true
+
+  /marked/4.2.12:
+    resolution: {integrity: sha512-yr8hSKa3Fv4D3jdZmtMMPghgVt6TWbk86WQaWhDloQjRSQhMMYCAro7jP7VDJrjjdV8pxVxMssXS8B8Y5DZ5aw==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: false
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
