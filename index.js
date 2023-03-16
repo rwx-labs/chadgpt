@@ -9,7 +9,8 @@ import OpenAI, { OpenAIApi } from "openai";
 import logging from "./chadgpt/logging.js";
 
 const logger = logging.createLogger("chadgpt");
-const configPath = process.env['CONFIG_PATH'] || path.join(process.cwd(), "config.yaml");
+const configPath =
+  process.env["CONFIG_PATH"] || path.join(process.cwd(), "config.yaml");
 
 logger.debug("Loading configuration file `%s'", configPath);
 const config = await fs.readFile(configPath, "utf8").then(YAML.parse);
@@ -69,26 +70,35 @@ client.on("privmsg", function (event) {
     const msg = result[1];
     const {
       model,
-      prompt,
+      messages,
       temperature,
       max_tokens,
       top_p,
       frequency_penalty,
       presence_penalty,
     } = openaiConfig;
-    const templatedPrompt = Mustache.render(prompt, {
-      nick: event.nick,
-      channel: event.target,
-      message: msg,
-      rawMessage: event.message,
+
+    const templatedMessages = messages.map((m) => {
+      return {
+        role: m["role"],
+        content: Mustache.render(m["content"], {
+          nick: event.nick,
+          channel: event.target,
+          message: msg,
+          rawMessage: event.message,
+        }),
+      };
     });
 
-    logger.debug("Requesting completion using prompt: %o", templatedPrompt);
+    logger.debug(
+      "Requesting completion using instructions: %j",
+      templatedMessages
+    );
 
     const completion = (async () =>
-      await openai.createCompletion({
+      await openai.createChatCompletion({
         model,
-        prompt: templatedPrompt,
+        messages: templatedMessages,
         temperature,
         max_tokens,
         top_p,
@@ -101,7 +111,10 @@ client.on("privmsg", function (event) {
         const choices = c.data.choices;
 
         if (choices.length > 0) {
-          let text = choices[0].text.trim();
+          let choice = choices[0];
+          let message = choice.message;
+
+          let text = message.content.trim();
           console.log(text);
 
           let lines = text.split("\n");
@@ -114,7 +127,10 @@ client.on("privmsg", function (event) {
         console.log(event, completion);
       })
       .catch((error) => {
-        client.say(event.target, `${event.nick}: OpenAI error: ${error.message}`);
+        client.say(
+          event.target,
+          `${event.nick}: OpenAI error: ${error.message}`
+        );
       });
   }
 });
