@@ -1,0 +1,96 @@
+---
+- it: should strip codeblocks
+  original: |-
+    Sure, here's an example:
+
+    ```javascript
+    const obj = {
+      name: 'John',
+      age: 25
+    };
+    ```
+  output: |-
+    Sure, here's an example:
+    const obj = {
+      name: 'John',
+      age: 25
+    };
+
+- it: should strip long code blocks
+  original: |-
+    Here's a JavaScript function called `removeRepeatedLines` that removes repeated lines in a given string, and also prints the lines that are repeated with the number of times they occur:
+
+    ```javascript
+    function removeRepeatedLines(str) {
+      const lines = str.split('\n');
+      const lineCount = {};
+      const uniqueLines = [];
+
+      lines.forEach(line => {
+        if (lineCount[line]) {
+          lineCount[line]++;
+        } else {
+          lineCount[line] = 1;
+          uniqueLines.push(line);
+        }
+      });
+
+      // Print repeated lines with their count
+      for (const line in lineCount) {
+        if (lineCount[line] > 1) {
+          console.log(`"${line}" repeated ${lineCount[line]} times.`);
+        }
+      }
+
+      // Return the string without repeated lines
+      return uniqueLines.join('\n');
+    }
+
+    // Example usage
+    const input = `Hello
+    World
+    Hello
+    JavaScript
+    World
+    Hello`;
+
+    const result = removeRepeatedLines(input);
+    console.log('-----');
+    console.log(result);
+    ```
+
+    This function first splits the input string into lines, and then iterates through the lines to count the occurrences of each line. It also keeps track of unique lines in an array called `uniqueLines
+  output: |-
+    Here's a JavaScript function called `removeRepeatedLines` that removes repeated lines in a given string, and also prints the lines that are repeated with the number of times they occur:
+    function removeRepeatedLines(str) {
+      const lines = str.split('\n');
+      const lineCount = {};
+      const uniqueLines = [];
+      lines.forEach(line => {
+        if (lineCount[line]) {
+          lineCount[line]++;
+        } else {
+          lineCount[line] = 1;
+          uniqueLines.push(line);
+        }
+      });
+      // Print repeated lines with their count
+      for (const line in lineCount) {
+        if (lineCount[line] > 1) {
+          console.log(`"${line}" repeated ${lineCount[line]} times.`);
+        }
+      }
+      // Return the string without repeated lines
+      return uniqueLines.join('\n');
+    }
+    // Example usage
+    const input = `Hello
+    World
+    Hello
+    JavaScript
+    World
+    Hello`;
+    const result = removeRepeatedLines(input);
+    console.log('-----');
+    console.log(result);
+    This function first splits the input string into lines, and then iterates through the lines to count the occurrences of each line. It also keeps track of unique lines in an array called `uniqueLines
