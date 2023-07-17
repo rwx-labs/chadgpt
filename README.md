@@ -16,6 +16,31 @@ docker run \
   ghcr.io/rwx-labs/chadgpt:edge
 ```
 
+## Development
+
+First, make sure you use the expected Node.js version.
+
+- If you use nvm, run `nvm use`
+- If you use fnm, run `fnm use`
+
+Next, install `pnpm` if you haven't already:
+
+```
+npm install -g pnpm
+```
+
+Then install the project dependencies:
+
+```
+pnpm install
+```
+
+Finally, you can start the client (make sure you edit `config.yaml`):
+
+```
+pnpm start
+```
+
 ## License
 
 This is licensed under the Apache 2.0 license.
