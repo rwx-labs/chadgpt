@@ -1,13 +1,13 @@
 ---
 irc:
   # The hostname or IP address of the IRC server.
-  host: irc.example.com
+  host: irc.rwx.im
   # The port number of the IRC server.
   port: 6697
   # Use a secure connection.
   tls: true
   # The nickname used by the bot.
-  nick: chad
+  nick: chud
   # The username used by the bot.
   username: chad
   # The version response to CTCP VERSION requests.
@@ -17,6 +17,9 @@ irc:
     - "#chad"
   # List of nicknames to ignore messages from.
   ignored_nicks: []
+  # Whether to automatically change nickname to the configured one if it wasn't
+  # available during registration, and the bot sees it become available.
+  keepnick: true
 
 # Configuration for the GPT completion requests.
 # Reference: https://beta.openai.com/docs/api-reference/completions
