@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Continuous Deployment
 
 on:
   push:
@@ -6,9 +6,56 @@ on:
     - main
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      with:
+        version: 8
+    - name: Prepare Node.js
+      uses: actions/setup-node@v3
+      with:
+        cache: pnpm
+        node-version-file: .nvmrc
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    - name: Perform linting
+      run: pnpm run lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      with:
+        version: 8
+    - name: Prepare Node.js
+      uses: actions/setup-node@v3
+      with:
+        cache: pnpm
+        node-version-file: .nvmrc
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    - name: Run tests (with coverage)
+      run: pnpm run test --coverage
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./.coverage/lcov.info
+
   build:
     name: Build and publish
     runs-on: ubuntu-latest
+    needs:
+    - lint
+    - test
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
@@ -66,7 +113,7 @@ jobs:
       working-directory: /tmp
     - name: Update chadgpt image tag
       env:
-        IMAGE_TAG: ${{ needs.build.outputs.digest }}
+        IMAGE_TAG: sha-${{ github.sha }}
       run: |
         yq --version
         yq -i '.helm.parameters[0].value = strenv(IMAGE_TAG)' .argocd-source.yaml
