@@ -51,11 +51,25 @@ jobs:
       with:
         repository: rwx-labs/k8s-rwx-apps
         ssh-key: ${{ secrets.DEPLOYMENT_PRIVATE_KEY }}
+    - name: Configure git credentials
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    - name: Install mikefarah/yq
+      env:
+        YQ_VERSION: "v4.35.1"
+        YQ_SHA256SUM: "bd695a6513f1196aeda17b174a15e9c351843fb1cef5f9be0af170f2dd744f08"
+      run: |
+        curl -L "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -o yq
+        echo "${YQ_SHA256SUM} yq" | sha256sum -c
+        install -m0755 ./yq /usr/local/bin/yq
+      working-directory: /tmp
     - name: Update chadgpt image tag
       env:
         IMAGE_TAG: ${{ needs.build.outputs.digest }}
       run: |
-        sed -i "s/\s*tag:.*/  tag: \"${IMAGE_TAG}\"/" values.yaml
+        yq --version
+        yq -i '.helm.parameters[0].value = strenv(IMAGE_TAG)' .argocd-source.yaml
 
         git add .
         git commit -m "chadgpt: Update to ${IMAGE_TAG}"
