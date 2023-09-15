@@ -91,7 +91,7 @@ jobs:
         IRC_CHANNEL: ${{ vars.IRC_CHANNEL }}
         META_WEBHOOK_TOKEN: ${{ secrets.META_WEBHOOK_TOKEN }}
         MESSAGE: |-
-          mk: chadgpt is pending deployment to production @ https://github.com/${{ github.repository }}/actions/runs/${{ github.run_number }}
+          mk: chadgpt is pending deployment to production @ https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         curl -X POST -H "Authorization: Bearer ${META_WEBHOOK_TOKEN}" \
           -H "Content-Type: application/json" \
