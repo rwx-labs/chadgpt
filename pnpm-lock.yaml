@@ -26,6 +26,9 @@ dependencies:
   openai:
     specifier: ^3.3.0
     version: 3.3.0
+  wildcard:
+    specifier: ^2.0.1
+    version: 2.0.1
   winston:
     specifier: ^3.11.0
     version: 3.11.0
@@ -3114,6 +3117,10 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
+
+  /wildcard@2.0.1:
+    resolution: {integrity: sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==}
+    dev: false
 
   /winston-transport@4.6.0:
     resolution: {integrity: sha512-wbBA9PbPAHxKiygo7ub7BYRiKxms0tpfU2ljtWzb3SjRjv5yl6Ozuy/TkXf00HTAt+Uylo3gSkNwzc4ME0wiIg==}
