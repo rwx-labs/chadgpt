@@ -16,7 +16,7 @@
       age: 25
     };
 
-- it: should strip long code blocks
+- it: should trim code blocks
   original: |-
     Here's a JavaScript function called `removeRepeatedLines` that removes repeated lines in a given string, and also prints the lines that are repeated with the number of times they occur:
 
@@ -94,3 +94,91 @@
     console.log('-----');
     console.log(result);
     This function first splits the input string into lines, and then iterates through the lines to count the occurrences of each line. It also keeps track of unique lines in an array called `uniqueLines
+
+- it: should keep unordered lists
+  original: |-
+    Here's a list:
+
+    - a
+    - b
+    - `c`
+  output: |-
+    Here's a list:
+    - a
+    - b
+    - `c`
+
+- it: should keep ordered lists
+  original: |-
+    Here's a list:
+
+    1. a
+    2. b
+    3. `c`
+  output: |-
+    Here's a list:
+    1. a
+    2. b
+    3. `c`
+
+- it: should keep unordered checkboxes
+  original: |-
+    Here's a task list with 1 checked and 2 unchecked tasks:
+
+    - [x] Buy groceries
+    - [ ] Clean the bathroom
+    - [ ] Call the dentist for an appointment
+  output: |-
+    Here's a task list with 1 checked and 2 unchecked tasks:
+    - [x] Buy groceries
+    - [ ] Clean the bathroom
+    - [ ] Call the dentist for an appointment
+
+- it: should keep ordered checkboxes
+  original: |-
+    Here's a task list with 1 checked and 2 unchecked tasks:
+
+    1. [x] Buy groceries
+    2. [ ] Clean the bathroom
+    3. [ ] Call the dentist for an appointment
+  output: |-
+    Here's a task list with 1 checked and 2 unchecked tasks:
+    1. [x] Buy groceries
+    2. [ ] Clean the bathroom
+    3. [ ] Call the dentist for an appointment
+
+- it: should keep tables
+  original: |-
+    Here's a table of the 3 latest US presidents and the day they went into office:
+
+    | President         | Inauguration Date |
+    |-------------------|-------------------|
+    | Joe Biden         | January 20, 2021  |
+    | Donald Trump      | January 20, 2017  |
+    | Barack Obama      | January 20, 2009* |
+
+    *Note: Barack Obama's first term began on January 20, 2009. He was re-elected and sworn in for his second term on January 20, 2013.
+  output: |-
+    Here's a table of the 3 latest US presidents and the day they went into office:
+    | President | Inauguration Date |
+    |-----------|-------------------|
+    | Joe Biden | January 20, 2021 |
+    | Donald Trump | January 20, 2017 |
+    | Barack Obama | January 20, 2009* |
+    *Note: Barack Obama's first term began on January 20, 2009. He was re-elected and sworn in for his second term on January 20, 2013.
+
+- it: should keep blockquotes
+  original: |-
+    > #### The quarterly results look great!
+    >
+    > - Revenue was off the chart.
+    > - Profits were higher than ever.
+    >
+    >  *Everything* is going according to **plan**.
+  output: |-
+    > #### The quarterly results look great!
+    >
+    > - Revenue was off the chart.
+    > - Profits were higher than ever.
+    >
+    >  *Everything* is going according to **plan**.
