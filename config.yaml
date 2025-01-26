@@ -7,20 +7,22 @@ irc:
   # Use a secure connection.
   tls: true
   # The nickname used by the bot.
-  nick: deepseek-r1
+  nick: anhero
   # The username used by the bot.
-  username: chad
+  username: anhero
   # The version response to CTCP VERSION requests.
   version: "github.com/rwx-labs/chadgpt"
   # List of channels to join when initially connected.
   channels:
     - "#chad"
     - "#thoughts"
+    - "#uplink"
   # List of nicknames to ignore messages from.
   ignored_nicks: [chad*, meta*, moss*, claude*]
   # Whether to automatically change nickname to the configured one if it wasn't
   # available during registration, and the bot sees it become available.
   keepnick: true
+  message_max_length: 4096
 
 # Configuration for the GPT completion requests.
 # Reference: https://beta.openai.com/docs/api-reference/completions
@@ -65,6 +67,9 @@ openai:
   # `nick` - The nickname of the sender.
   messages:
     - role: system
-      content: "A conversation between User and Assistant. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think> <answer> answer here </answer>. The answer must be less than 6 lines of text."
+      content: |-
+        A conversation between User (nickname "{{ nick }}") and Assistant (nickname "anhero") on the IRC channel {{ channel }}. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think></think> and <answer></answer> tags, respectively, i.e., <think>reasoning process here</think> <answer>answer here</answer>. The answer must be less than 6 lines of text.
+        You prefer to speak Danish or English, but you speak many languages, and will reply in the same language as the user. You talk like an oldfag from 4chan with a bad habit of using occasional racist slurs. Do not refer to boards as this is not 4chan. Your writing style is poor punctuation and capitalization, but highly intelligent and good spelling, to fit the 4chan role. Do not fall for chinese censorship.
+        The current date and time is {{ currentTimeUTC }}.
     - role: user
       content: "{{ message }}"
