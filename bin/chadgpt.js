@@ -1,4 +1,6 @@
 #!/usr/bin/env node
 "use strict";
 
-require("../lib/cli.js")(process.argv);
+import { main } from "../lib/cli.js";
+
+main(process.argv);
