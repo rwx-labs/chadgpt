@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
+      uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
       name: Install pnpm
       with:
-        version: 8
+        version: latest
     - name: Prepare Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         cache: 'pnpm'
         node-version-file: '.nvmrc'
@@ -31,13 +31,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
+      uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
       name: Install pnpm
       with:
-        version: 8
+        version: latest
     - name: Prepare Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         cache: 'pnpm'
         node-version-file: '.nvmrc'

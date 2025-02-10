@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "check-format": "prettier . --check --cache",
     "format": "prettier . --write --cache",
-    "lint": "eslint . --cache --max-warnings=0 --ext .js,.mjs",
+    "lint": "eslint . --cache --max-warnings=0",
     "start": "node bin/chadgpt.js",
-    "test": "jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test-coverage": "jest --coverage",
     "prepare": "husky install"
   },
@@ -23,41 +24,24 @@
     "!**/__tests__/**"
   ],
   "dependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^5.4.1",
     "commander": "^10.0.1",
     "irc-framework": "^4.14.0",
     "lodash": "^4.17.21",
     "marked": "^4.3.0",
     "mustache": "^4.2.0",
-    "openai": "^3.3.0",
+    "openai": "^4.83.0",
     "wildcard": "^2.0.1",
-    "winston": "^3.15.0",
-    "yaml": "^2.6.0"
+    "winston": "^3.17.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "@eslint/js": "^9.19.0",
+    "eslint": "^9.19.0",
+    "globals": "^15.14.0",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "prettier": "2.8.3"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "jest": true
-    },
-    "extends": "eslint:recommended",
-    "overrides": [],
-    "parserOptions": {
-      "ecmaVersion": "latest"
-    },
-    "rules": {
-      "no-unused-vars": [
-        "error",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
-    }
   },
   "jest": {
     "clearMocks": true,
