@@ -5,6 +5,20 @@
 
 ChadGPT is a simple IRC bot that replies to messages using large language models.
 
+## Features
+
+* Reasoning model support
+* Keepnick (change to preferred nickname when it becomes available)
+
+## Planned features
+
+This is a list of futures that are planned, but have no deadline:
+
+* Support for reasoning *and* non-reasoning models
+* Message chat history
+* Telemetry
+* Response caching
+
 ## Usage
 
 To use the container image with Docker, run:
