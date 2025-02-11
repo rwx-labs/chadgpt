@@ -34,11 +34,7 @@ jobs:
     - name: Install dependencies
       run: bun install --frozen-lockfile
     - name: Run tests (with coverage)
-      run: |
-        bun test \
-          --coverage \
-          --coverage-dir .coverage \
-          --coverage-reporter lcov
+      run: bun test --coverage
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:

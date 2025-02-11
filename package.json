@@ -9,8 +9,6 @@
     "format": "prettier . --write --cache",
     "lint": "eslint . --cache --max-warnings=0",
     "start": "bun run bin/chadgpt.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-coverage": "jest --coverage",
     "prepare": "husky install"
   },
   "author": "Mikkel Kroman <mk@maero.dk>",
