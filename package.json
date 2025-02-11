@@ -2,7 +2,7 @@
   "name": "chadgpt",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "bin/chadgpt.js",
   "type": "module",
   "scripts": {
     "check-format": "prettier . --check --cache",
@@ -21,7 +21,8 @@
   "files": [
     "bin/**/*.js",
     "lib/**/*.js",
-    "!**/__tests__/**"
+    "tests/**/*.js",
+    "tests/**/*.ts"
   ],
   "dependencies": {
     "chalk": "^5.4.1",
@@ -40,20 +41,6 @@
     "eslint": "^9.20.0",
     "globals": "^15.14.0",
     "husky": "^8.0.3",
-    "jest": "^29.7.0",
     "prettier": "2.8.3"
-  },
-  "jest": {
-    "clearMocks": true,
-    "collectCoverage": false,
-    "collectCoverageFrom": [
-      "lib/**/*.js",
-      "!lib/**/{__tests__,testUtils}/**/*.js"
-    ],
-    "coverageDirectory": "./.coverage/",
-    "coverageReporters": [
-      "lcov",
-      "text-summary"
-    ]
   }
 }
