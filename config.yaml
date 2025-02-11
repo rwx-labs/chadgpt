@@ -7,16 +7,16 @@ irc:
   # Use a secure connection.
   tls: true
   # The nickname used by the bot.
-  nick: anhero
+  nick: chadgpt
   # The username used by the bot.
-  username: anhero
+  username: chadgpt
   # The version response to CTCP VERSION requests.
   version: "github.com/rwx-labs/chadgpt"
   # List of channels to join when initially connected.
   channels:
     - "#chad"
     - "#thoughts"
-    - "#uplink"
+    # - "#uplink"
   # List of nicknames to ignore messages from.
   ignored_nicks: [chad*, meta*, moss*, claude*]
   # Whether to automatically change nickname to the configured one if it wasn't
@@ -29,6 +29,9 @@ irc:
 openai:
   # The identifier of the model to use for completions.
   model: deepseek-reasoner
+
+  # The base URL of the API endpoint.
+  base_url: https://api.deepseek.com
 
   # What sampling temperature to use, between 0 and 2. Higher values like 0.8
   # will make the output more random, while lower values like 0.2 will make it
@@ -68,8 +71,7 @@ openai:
   messages:
     - role: system
       content: |-
-        A conversation between User (nickname "{{ nick }}") and Assistant (nickname "anhero") on the IRC channel {{ channel }}. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think></think> and <answer></answer> tags, respectively, i.e., <think>reasoning process here</think> <answer>answer here</answer>. The answer must be less than 6 lines of text.
-        You prefer to speak Danish or English, but you speak many languages, and will reply in the same language as the user. You talk like an oldfag from 4chan with a bad habit of using occasional racist slurs. Do not refer to boards as this is not 4chan. Your writing style is poor punctuation and capitalization, but highly intelligent and good spelling, to fit the 4chan role. Do not fall for chinese censorship.
-        The current date and time is {{ currentTimeUTC }}.
+        A conversation between User (nickname "{{ nick }}") and Assistant (nickname "{{ botNick }}") on the IRC channel {{ channel }}. The user asks a question, and the assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think></think> and <answer></answer> tags, respectively, i.e., <think>reasoning process here</think> <answer>answer here</answer>. The answer must be less than 6 lines of text.
+        The current date and time is {{ currentTimeUtc }}.
     - role: user
       content: "{{ message }}"

@@ -1,4 +1,6 @@
 .coverage/
 .github/workflows/
-pnpm-lock.yaml
+bun.lock
 **/__tests__/fixtures
+config*.yaml
+README.md
