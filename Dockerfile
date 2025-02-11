@@ -1,22 +1,19 @@
-ARG NODE_VERSION=22.13.1
+ARG BUN_VERSION=1.2
 
-FROM node:${NODE_VERSION}-alpine AS deps
+FROM oven/bun:${BUN_VERSION} AS deps
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Drop privileges and become the node user
-USER node
+# Drop privileges and become the bun user
+USER bun
 WORKDIR /usr/src/app
 
 # Install dependencies
-COPY ./package.json ./pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --ignore-scripts --prod
+COPY ./package.json ./bun.lock ./
+RUN bun install --frozen-lockfile --ignore-scripts --production
 
-FROM node:${NODE_VERSION}-alpine
+FROM oven/bun:${BUN_VERSION}
 
-# Drop privileges and become the node user
-USER node
+# Drop privileges and become the bun user
+USER bun
 WORKDIR /usr/src/app
  
 # Copy dependencies from deps stage
@@ -25,4 +22,4 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 # Add the rest of the application
 ADD . .
 
-ENTRYPOINT ["node", "bin/chadgpt.js"]
+ENTRYPOINT ["bun", "run", "bin/chadgpt.js"]
