@@ -22,4 +22,7 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 # Add the rest of the application
 ADD . .
 
+# Add production environment variables
+ENV NODE_ENV=production
+
 ENTRYPOINT ["bun", "run", "bin/chadgpt.js"]
