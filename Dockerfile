@@ -1,19 +1,19 @@
-ARG BUN_VERSION=1.2
+ARG BUN_VERSION=1.2-distroless
 
 FROM oven/bun:${BUN_VERSION} AS deps
 
 # Drop privileges and become the bun user
-USER bun
+USER nonroot
 WORKDIR /usr/src/app
 
 # Install dependencies
 COPY ./package.json ./bun.lock ./
-RUN bun install --frozen-lockfile --ignore-scripts --production
+RUN ["bun", "install", "--frozen-lockfile", "--ignore-scripts", "--production"]
 
 FROM oven/bun:${BUN_VERSION}
 
 # Drop privileges and become the bun user
-USER bun
+USER nonroot
 WORKDIR /usr/src/app
  
 # Copy dependencies from deps stage
