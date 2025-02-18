@@ -15,7 +15,7 @@ irc:
   # List of channels to join when initially connected.
   channels:
   - "#chad"
-  - "#thoughts"
+    # - "#thoughts"
   # List of nicknames to ignore messages from.
   ignored_nicks: []
   # Whether to automatically change nickname to the configured one if it wasn't
@@ -28,10 +28,19 @@ llm:
   provider: openai
 
   # The identifier of the model to use for completions.
-  model: deepseek-reasoner
+  model: gpt-4o-mini
 
   # Override the base URL of the API endpoint.
-  base_url: https://api.deepseek.com
+  # base_url: https://api.deepseek.com
+  
+  # The reasoning method of the model. This controls how thoughts and answers
+  # are extracted from the API response.
+  #
+  # Options:
+  # * `think-answer-tags` - response is formatted with <think></think> and
+  #    <answer></answer> tags and are extracted.
+  # * `none` or false - response is preserved as is.
+  reasoning_method: none
 
   # What sampling temperature to use, between 0 and 2. Higher values like 0.8
   # will make the output more random, while lower values like 0.2 will make it
@@ -51,13 +60,8 @@ llm:
   # `channel` - The name of the channel the message was sent in.
   # `nick` - The nickname of the sender.
   messages:
-  - role: system
+  - role: assistant
     content: |-
-      A conversation between User (nickname "{{ nick }}") and Assistant (nickname "{{ botNick }}") on the IRC channel {{ channel }}.
-      The user asks a question, and the assistant solves it.
-      The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.
-      The reasoning process and answer are enclosed within <think></think> and <answer></answer> tags, respectively, i.e., <think>reasoning process here</think> <answer>answer here</answer>.
-      The answer must be less than 6 lines of text.
-      The current date and time is {{ currentTimeUtc }}.
+        You are a helpful AI assistant.
   - role: user
     content: "{{ message }}"

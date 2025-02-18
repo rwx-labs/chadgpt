@@ -1,15 +1,6 @@
-import { OpenAI as OpenAIClient } from "openai";
-
+import { AnthropicClient } from "./llm/anthropic.ts";
 import { LlmConfig } from "./config.js";
-
-/**
- * Base configuration for any LLM client.
- * Specific providers may extend this interface.
- */
-export interface AdapterConfig {
-  apiKey: string;
-  [key: string]: any; // Allows for provider-specific configuration
-}
+import { OpenAIClient } from "./llm/openai.ts";
 
 /**
  * The LLM API provider.
@@ -26,73 +17,93 @@ export enum Role {
 }
 
 export interface TextGenerationMessage {
-  /**
-   * The message contents.
-   */
+  /** The message contents. */
   content: string;
-
-  /**
-   * The role of the participant.
-   */
+  /** The role of the participant. */
   role: Role;
-
-  /**
-   * An optional name of the participant.
-   */
+  /** An optional name of the participant. */
   name?: string;
 }
 
 export interface TextGenerationRequest {
   /**
-   * Naming identifier of the model.
+   * Optional naming identifier of the model.
+   * Takes presedence over the LLM clients model.
    */
-  model: string;
-
-  /**
-   * List of messages comprising the conversation.
-   */
+  model?: string;
+  /** List of messages comprising the conversation. */
   messages: Array<TextGenerationMessage>;
-
-  /**
-   * Sampling temperature to use.
-   */
-  temperature: number;
+  /** Sampling temperature to use. */
+  temperature?: number;
+  /** Reasoning efforts for models that support it. */
+  reasoning_effort?: "low" | "medium" | "high";
 }
 
-export interface TextGenerationResponse {}
+export interface TextGenerationResponseUsage {
+  /** Number of tokens used for completion. */
+  completion_tokens: number;
+  /** Number of otkens used in the prompt. */
+  prompt_tokens: number;
+  /** Total number of tokens used (prompt + completion) */
+  total_tokens: number;
+}
 
-interface LlmClient {
+export interface TextGenerationResponseChoice {
+  /** The index of this choice. */
+  index?: number;
+  /** The generated message. */
+  message: TextGenerationResponseMessage;
+  /** The reason the model stopped generating text, usually `stop`. */
+  finish_reason?: string;
+}
+
+export interface TextGenerationResponseMessage {
+  /** The contents of the message. */
+  content: string | null;
+  /** Optional reasoning content. */
+  reasoning_content?: string;
+  /** Reason for refusal, if any. */
+  refusal?: string;
+  /** The users role, usually `assistant`. */
+  role?: string;
+}
+
+export interface TextGenerationResponseThought {
+  /** The contents of the thought. */
+  content: string;
+}
+
+export interface TextGenerationResponse {
+  /** A unique identifier of the completion. */
+  id: string;
+  /** The name of the model that generated this response. */
+  model: string;
+  /** The unix epoch timestamp of when the response was created. */
+  created: number;
+  /** A unique fingerpring representing the request as it propagates through the
+   * backend. */
+  system_fingerprint?: string;
+  /** List of thoughts the model might have had during generation. */
+  thoughts?: Array<TextGenerationResponseThought>;
+  /** List of choices for completions. Should always have at most 1. */
+  choices: Array<TextGenerationResponseChoice>;
+}
+
+export interface LlmClient {
   createTextCompletion(
     request: TextGenerationRequest
   ): Promise<TextGenerationResponse>;
 }
 
-export class OpenAIAdapter implements LlmClient {
-  config: LlmConfig;
-  client: OpenAIClient;
+export function createLlmClient(config: LlmConfig): LlmClient {
+  const provider = config.provider;
 
-  constructor(config: LlmConfig, client: OpenAIClient) {
-    this.config = config;
-    this.client = client;
+  switch (provider) {
+    case "anthropic":
+      return new AnthropicClient(config);
+    case "openai":
+      return new OpenAIClient(config);
+    default:
+      throw new Error(`Invalid provider: ${provider}`);
   }
-
-  createTextCompletion(
-    request: TextGenerationRequest
-  ): Promise<TextGenerationResponse> {
-    return this.client.chat.completions.create({
-      model: this.config.model,
-      messages: request.messages,
-    });
-  }
-}
-
-export function createLlmAdapter(config: LlmConfig): LlmClient {
-  let opts = {};
-
-  if (config.base_url != null) {
-    opts["baseURL"] = config.base_url;
-  }
-
-  const client = new OpenAIClient(opts);
-  return new OpenAIAdapter(config, client);
 }

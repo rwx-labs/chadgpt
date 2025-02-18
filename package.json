@@ -23,21 +23,23 @@
     "tests/**/*.ts"
   ],
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
     "chalk": "^5.4.1",
     "commander": "^10.0.1",
     "irc-framework": "^4.14.0",
     "lodash": "^4.17.21",
     "marked": "^4.3.0",
     "mustache": "^4.2.0",
-    "openai": "^4.83.0",
+    "openai": "^4.85.1",
     "wildcard": "^2.0.1",
     "winston": "^3.17.0",
     "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
+    "@types/bun": "^1.2.2",
     "eslint": "^9.20.1",
-    "globals": "^15.14.0",
+    "globals": "^15.15.0",
     "husky": "^8.0.3",
     "prettier": "2.8.3"
   }
