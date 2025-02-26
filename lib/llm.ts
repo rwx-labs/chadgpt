@@ -79,7 +79,7 @@ export interface TextGenerationResponse {
   /** The name of the model that generated this response. */
   model: string;
   /** The unix epoch timestamp of when the response was created. */
-  created: number;
+  created?: number;
   /** A unique fingerpring representing the request as it propagates through the
    * backend. */
   system_fingerprint?: string;

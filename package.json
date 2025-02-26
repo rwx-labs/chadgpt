@@ -5,10 +5,11 @@
   "main": "bin/chadgpt.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "check-format": "prettier . --check --cache",
     "format": "prettier . --write --cache",
     "lint": "eslint . --cache --max-warnings=0",
-    "start": "bun run bin/chadgpt.js",
+    "start": "bunx tsc && node ./build/bin/chadgpt.js",
     "prepare": "husky install"
   },
   "author": "Mikkel Kroman <mk@maero.dk>",
@@ -41,6 +42,7 @@
     "eslint": "^9.20.1",
     "globals": "^15.15.0",
     "husky": "^8.0.3",
-    "prettier": "2.8.3"
+    "prettier": "2.8.3",
+    "typescript": "^5.7.3"
   }
 }

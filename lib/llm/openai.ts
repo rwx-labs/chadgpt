@@ -19,7 +19,7 @@ export class OpenAIClient implements LlmClient {
   constructor(config: LlmConfig) {
     this.config = config;
 
-    let opts = {};
+    let opts: { [key: string]: any } = {};
 
     if (config.base_url) {
       opts["baseURL"] = config.base_url;

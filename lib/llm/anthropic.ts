@@ -44,6 +44,8 @@ export class AnthropicClient implements LlmClient {
         }
 
         return {
+          id: result.id,
+          model: result.model,
           choices: [
             {
               message: {
