@@ -21,17 +21,23 @@ export class AnthropicClient implements LlmClient {
   async createTextCompletion(
     request: TextGenerationRequest
   ): Promise<TextGenerationResponse> {
+    const systemPrompt = request.messages.find(
+      (request) => request.role == "system"
+    )?.content;
     // Format the request messages as the anthropic client expects it.
-    const messages = request.messages.map((request) => {
-      return {
-        role: this.roleToString(request.role),
-        content: request.content,
-      };
-    });
+    const messages = request.messages
+      .filter((request) => request.role != "system")
+      .map((request) => {
+        return {
+          role: this.roleToString(request.role),
+          content: request.content,
+        };
+      });
     const completion = await this.client.messages
       .create({
         model: this.config.model,
         messages: messages,
+        system: systemPrompt,
         max_tokens: this.config.max_completion_tokens,
       })
       .then((result) => {
