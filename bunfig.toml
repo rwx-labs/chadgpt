@@ -1,3 +1,4 @@
 [test]
 coverageDir = ".coverage"
 coverageReporter = ["text", "lcov"]
+preload = ["./tests/setup.ts"]
