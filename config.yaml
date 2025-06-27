@@ -50,6 +50,11 @@ llm:
   # more focused and deterministic.
   # temperature: 1
 
+  # Seed value for deterministic output generation.
+  # When set, the model will try to produce more deterministic results.
+  # Support depends on the provider and model used.
+  # seed: 123456
+
   # The maximum number of tokens to generate in the chat completion.
   max_tokens: 4094
 

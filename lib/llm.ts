@@ -37,6 +37,8 @@ export interface TextGenerationRequest {
   temperature?: number;
   /** Reasoning efforts for models that support it. */
   reasoning_effort?: "low" | "medium" | "high";
+  /** Seed value for deterministic output generation. */
+  seed?: number;
 }
 
 export interface TextGenerationResponseUsage {
