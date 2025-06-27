@@ -33,13 +33,16 @@ export class AnthropicClient implements LlmClient {
           content: request.content,
         };
       });
+
+    let options = {
+      model: this.config.model,
+      messages: messages,
+      system: systemPrompt,
+      max_tokens: this.config.max_completion_tokens,
+    };
+
     const completion = await this.client.messages
-      .create({
-        model: this.config.model,
-        messages: messages,
-        system: systemPrompt,
-        max_tokens: this.config.max_completion_tokens,
-      })
+      .create(options)
       .then((result) => {
         const textContent = result.content.find(
           (content) => content.type == "text"

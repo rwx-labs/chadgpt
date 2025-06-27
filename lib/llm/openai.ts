@@ -45,11 +45,18 @@ export class OpenAIClient implements LlmClient {
   async createTextCompletion(
     request: TextGenerationRequest
   ): Promise<TextGenerationResponse> {
+    const options: any = {
+      model: this.config.model,
+      messages: request.messages,
+    };
+
+    // Only include seed if it's provided
+    if (request.seed || this.config.seed) {
+      options.seed = request.seed || this.config.seed;
+    }
+
     const completion = await this.client.chat.completions
-      .create({
-        model: this.config.model,
-        messages: request.messages,
-      })
+      .create(options)
       .then((result) => {
         const choice = result.choices[0];
         const message = choice.message;
