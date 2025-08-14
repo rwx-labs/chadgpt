@@ -43,7 +43,7 @@ export class OpenAIClient implements LlmClient {
   }
 
   async createTextCompletion(
-    request: TextGenerationRequest
+    request: TextGenerationRequest,
   ): Promise<TextGenerationResponse> {
     const options: any = {
       model: this.config.model,
@@ -63,7 +63,7 @@ export class OpenAIClient implements LlmClient {
 
     this.logger.debug(
       { completion_request: options },
-      "creating openai chat completion"
+      "creating openai chat completion",
     );
 
     const completion = await this.client.chat.completions
@@ -71,7 +71,7 @@ export class OpenAIClient implements LlmClient {
       .then((result) => {
         this.logger.debug(
           { completion_response: result },
-          "created openai chat completion"
+          "created openai chat completion",
         );
 
         const choice = result.choices[0];
@@ -79,7 +79,7 @@ export class OpenAIClient implements LlmClient {
 
         if (message.role != Role.Assistant) {
           this.logger.warn(
-            "openai returned a message that wasn't from the assistant as expected"
+            "openai returned a message that wasn't from the assistant as expected",
           );
         }
 

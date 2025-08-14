@@ -24,14 +24,14 @@ export class AnthropicClient implements LlmClient {
   }
 
   async createTextCompletion(
-    request: TextGenerationRequest
+    request: TextGenerationRequest,
   ): Promise<TextGenerationResponse> {
     // Extract the system prompt message as Anthropic uses a parameter instead
     const systemPrompt = request.messages.find(
-      (request) => request.role == Role.System
+      (request) => request.role == Role.System,
     )?.content;
     const messages = request.messages.filter(
-      (request) => request.role != Role.System
+      (request) => request.role != Role.System,
     );
 
     let options: any = {
@@ -50,7 +50,7 @@ export class AnthropicClient implements LlmClient {
 
     this.logger.debug(
       { completion_request: options },
-      "creating anthropic chat completion"
+      "creating anthropic chat completion",
     );
 
     const completion = await this.client.messages
@@ -58,11 +58,11 @@ export class AnthropicClient implements LlmClient {
       .then((result) => {
         this.logger.debug(
           { completion_response: result },
-          "created anthropic chat completion"
+          "created anthropic chat completion",
         );
 
         const textContent = result.content.find(
-          (content) => content.type == "text"
+          (content) => content.type == "text",
         );
 
         if (!textContent) {
