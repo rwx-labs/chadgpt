@@ -30,7 +30,7 @@ describe("OpenAIClient", () => {
     } as TextGenerationRequest);
 
     expect(result.choices[0].message.content).toEqual(
-      "This is a mock response from the test server."
+      "This is a mock response from the test server.",
     );
     expect(result.choices[0].message.reasoning_content).toEqual("hello world");
   });
