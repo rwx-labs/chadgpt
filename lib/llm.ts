@@ -16,6 +16,14 @@ export enum Role {
   Assistant = "assistant",
 }
 
+/**
+ * The reasoning method.
+ */
+export enum ReasoningMethod {
+  ExtractThinkTagsFromMessage = "think-answer-tags",
+  ExtractThoughtContent = "thinking-message",
+}
+
 export interface TextGenerationMessage {
   /** The message contents. */
   content: string;
@@ -36,7 +44,7 @@ export interface TextGenerationRequest {
   /** Sampling temperature to use. */
   temperature?: number;
   /** Reasoning efforts for models that support it. */
-  reasoning_effort?: "low" | "medium" | "high";
+  reasoning_effort?: "minimal" | "low" | "medium" | "high";
   /** Seed value for deterministic output generation. */
   seed?: number;
 }

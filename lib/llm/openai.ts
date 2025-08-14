@@ -1,5 +1,5 @@
 import { OpenAI } from "openai";
-import winston from "winston";
+import pino from "pino";
 
 import { extractContentBetweenTags } from "../message_utils.js";
 import {
@@ -7,6 +7,8 @@ import {
   TextGenerationResponse,
   TextGenerationRequest,
   TextGenerationResponseMessage,
+  ReasoningMethod,
+  Role,
 } from "../llm.ts";
 import { createLogger } from "../logging.js";
 import { LlmConfig } from "../config.js";
@@ -14,7 +16,7 @@ import { LlmConfig } from "../config.js";
 export class OpenAIClient implements LlmClient {
   private config: LlmConfig;
   client: OpenAI;
-  logger: winston.Logger;
+  logger: pino.Logger;
 
   constructor(config: LlmConfig) {
     this.config = config;
@@ -33,10 +35,8 @@ export class OpenAIClient implements LlmClient {
   private isReasoningModel() {
     const reasoning_method = this.config.reasoning_method;
 
-    if (reasoning_method == "think-answer-tags") {
+    if (reasoning_method == ReasoningMethod.ExtractThinkTagsFromMessage) {
       return true;
-    } else if (reasoning_method == "none" || !reasoning_method) {
-      return false;
     }
 
     return false;
@@ -50,25 +50,41 @@ export class OpenAIClient implements LlmClient {
       messages: request.messages,
     };
 
-    // Only include seed if it's provided
-    if (request.seed || this.config.seed) {
-      options.seed = request.seed || this.config.seed;
+    const seed = request.seed ?? this.config.seed;
+    if (seed) {
+      options.seed = seed;
     }
+
+    const reasoning_effort =
+      request.reasoning_effort ?? this.config.reasoning_effort;
+    if (reasoning_effort) {
+      options.reasoning_effort = reasoning_effort;
+    }
+
+    this.logger.debug(
+      { completion_request: options },
+      "creating openai chat completion"
+    );
 
     const completion = await this.client.chat.completions
       .create(options)
       .then((result) => {
+        this.logger.debug(
+          { completion_response: result },
+          "created openai chat completion"
+        );
+
         const choice = result.choices[0];
         const message = choice.message;
 
-        if (message.role != "assistant") {
+        if (message.role != Role.Assistant) {
           this.logger.warn(
             "openai returned a message that wasn't from the assistant as expected"
           );
         }
 
         if (message.content !== null && message.content.length <= 1) {
-          throw new Error("Expected content");
+          throw new Error("OpenAI returned empty content");
         }
 
         let content = message.content as string;
@@ -78,7 +94,11 @@ export class OpenAIClient implements LlmClient {
           content,
         };
 
-        if (this.isReasoningModel()) {
+        if (
+          this.isReasoningModel() &&
+          this.config.reasoning_method ==
+            ReasoningMethod.ExtractThinkTagsFromMessage
+        ) {
           let [thoughts, answers] = this.extractThoughtsAndAnswers(content);
 
           msg.reasoning_content = thoughts;
