@@ -101,7 +101,7 @@ export interface TextGenerationResponse {
 
 export interface LlmClient {
   createTextCompletion(
-    request: TextGenerationRequest
+    request: TextGenerationRequest,
   ): Promise<TextGenerationResponse>;
 }
 
