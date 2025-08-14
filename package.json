@@ -5,11 +5,10 @@
   "main": "bin/chadgpt.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
     "check-format": "prettier . --check --cache",
     "format": "prettier . --write --cache",
     "lint": "eslint . --cache --max-warnings=0",
-    "start": "bunx tsc && node ./build/bin/chadgpt.js",
+    "start": "bun run ./bin/chadgpt.js",
     "prepare": "husky install"
   },
   "author": "Mikkel Kroman <mk@maero.dk>",
@@ -25,7 +24,7 @@
   ],
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
-    "chalk": "^5.4.1",
+    "chalk": "^5.5.0",
     "commander": "^10.0.1",
     "irc-framework": "^4.14.0",
     "lodash": "^4.17.21",
@@ -34,15 +33,15 @@
     "openai": "^4.104.0",
     "pino": "^9.9.0",
     "wildcard": "^2.0.1",
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.0",
-    "@types/bun": "^1.2.17",
-    "eslint": "^9.30.0",
+    "@eslint/js": "^9.33.0",
+    "@types/bun": "^1.2.20",
+    "eslint": "^9.33.0",
     "globals": "^15.15.0",
     "husky": "^8.0.3",
     "prettier": "2.8.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   }
 }

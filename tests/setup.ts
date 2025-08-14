@@ -40,7 +40,6 @@ export async function openAIMockServer(model: string) {
         });
       }
 
-      console.log(`not found: ${req.url}`);
       return new Response("Not Found", { status: 404 });
     },
   });

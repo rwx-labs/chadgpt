@@ -5,7 +5,7 @@
       "name": "chadgpt",
       "dependencies": {
         "@anthropic-ai/sdk": "^0.36.3",
-        "chalk": "^5.4.1",
+        "chalk": "^5.5.0",
         "commander": "^10.0.1",
         "irc-framework": "^4.14.0",
         "lodash": "^4.17.21",
@@ -14,16 +14,16 @@
         "openai": "^4.104.0",
         "pino": "^9.9.0",
         "wildcard": "^2.0.1",
-        "yaml": "^2.8.0",
+        "yaml": "^2.8.1",
       },
       "devDependencies": {
-        "@eslint/js": "^9.30.0",
-        "@types/bun": "^1.2.17",
-        "eslint": "^9.30.0",
+        "@eslint/js": "^9.33.0",
+        "@types/bun": "^1.2.20",
+        "eslint": "^9.33.0",
         "globals": "^15.15.0",
         "husky": "^8.0.3",
         "prettier": "2.8.3",
-        "typescript": "^5.8.3",
+        "typescript": "^5.9.2",
       },
     },
   },
@@ -106,7 +106,7 @@
 
     "callsites": ["callsites@3.1.0", "", {}, "sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ=="],
 
-    "chalk": ["chalk@5.4.1", "", {}, "sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w=="],
+    "chalk": ["chalk@5.5.0", "", {}, "sha512-1tm8DTaJhPBG3bIkVeZt1iZM9GfSX2lzOeDVZH9R9ffRHpmHvxZ/QhgQH/aDTkswQVt+YHdXAdS/In/30OjCbg=="],
 
     "color-convert": ["color-convert@2.0.1", "", { "dependencies": { "color-name": "~1.1.4" } }, "sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ=="],
 

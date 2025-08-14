@@ -16,10 +16,6 @@ afterEach(async () => {
 });
 
 describe("OpenAIClient", () => {
-  test("should have original response when not reasoning", async () => {
-    console.log("port: %d", OPENAI_SERVER.port);
-  });
-
   test("should extract reasoning thoughts and answers", async () => {
     const config = LlmConfig.from({
       model: "test-model",
