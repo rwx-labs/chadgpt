@@ -16,6 +16,10 @@ afterEach(async () => {
 });
 
 describe("OpenAIClient", () => {
+  test("should have original response when not reasoning", async () => {
+    console.log("port: %d", OPENAI_SERVER.port);
+  });
+
   test("should extract reasoning thoughts and answers", async () => {
     const config = LlmConfig.from({
       model: "test-model",
@@ -30,7 +34,7 @@ describe("OpenAIClient", () => {
     } as TextGenerationRequest);
 
     expect(result.choices[0].message.content).toEqual(
-      "This is a mock response from the test server.",
+      "This is a mock response from the test server."
     );
     expect(result.choices[0].message.reasoning_content).toEqual("hello world");
   });
