@@ -15,36 +15,47 @@ irc:
   # List of channels to join when initially connected.
   channels:
   - "#chad"
-  # - "#thoughts"
-  # List of nicknames to ignore messages from.
-  ignored_nicks: []
+  # List of nicknames to ignore. You can use * to partially match nicknames,
+  # e.g. `foo*` will ignore `foo`, `foobar` and `foobaz`.
+  # ignored_nicks: []
   # Whether to automatically change nickname to the configured one if it wasn't
   # available during registration, and the bot sees it become available.
   keepnick: true
-  message_max_length: 4094
+  # The maximum length of a message before it gets split into multiple.
+  # message_max_length: 4094
 
 llm:
   # The LLM API provider to use (openai or anthropic).
   provider: openai
 
   # The identifier of the model to use for completions.
-  model: gpt-4o-mini
+  model: gpt-5
 
   # Override the base URL of the API endpoint.
   # base_url: https://api.deepseek.com
-  
+
   # The reasoning method of the model. This controls how thoughts and answers
   # are extracted from the API response.
   #
   # Options:
   # * `think-answer-tags` - response is formatted with <think></think> and
   #    <answer></answer> tags and are extracted.
+  # * `thinking-message` - thinking messages are extracted from messages with
+  #   `type == "thinking"`
   # * `none` or false - response is preserved as is.
-  reasoning_method: none
-  
+  # reasoning_method: none
+
+  # How many tokens the model can use for its internal reasoning process. Only
+  # supported on some Anthropic models.
+  # reasoning_tokens: 10000
+
+  # Level of effort on reasoning for reasoning models. Only supported by some OpenAI models.
+  # Reference: https://platform.openai.com/docs/api-reference/chat/create#chat_create-reasoning_effort
+  # Options: minimal, low, medium, high
+  # reasoning_effort: medium
+
   # Channel where thought messages should be sent. If not specified, thoughts won't be sent.
   # thoughts_channel: "#thoughts"
-
   # What sampling temperature to use, between 0 and 2. Higher values like 0.8
   # will make the output more random, while lower values like 0.2 will make it
   # more focused and deterministic.
@@ -68,8 +79,8 @@ llm:
   # `channel` - The name of the channel the message was sent in.
   # `nick` - The nickname of the sender.
   messages:
-  - role: assistant
+  - role: system
     content: |-
-        You are a helpful AI assistant.
+      You are a helpful AI assistant.
   - role: user
     content: "{{ message }}"

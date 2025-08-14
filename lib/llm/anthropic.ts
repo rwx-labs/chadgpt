@@ -1,3 +1,4 @@
+import pino from "pino";
 import { Anthropic } from "@anthropic-ai/sdk";
 
 import {
@@ -6,44 +7,60 @@ import {
   TextGenerationRequest,
   Role,
   TextGenerationResponseMessage,
+  ReasoningMethod,
 } from "../llm.ts";
 import { LlmConfig } from "../config.js";
+import { createLogger } from "../logging.js";
 
 export class AnthropicClient implements LlmClient {
   private config: LlmConfig;
   client: Anthropic;
+  logger: pino.Logger;
 
   constructor(config: LlmConfig) {
     this.config = config;
     this.client = new Anthropic();
+    this.logger = createLogger("chadgpt.AnthropicClient");
   }
 
   async createTextCompletion(
     request: TextGenerationRequest
   ): Promise<TextGenerationResponse> {
+    // Extract the system prompt message as Anthropic uses a parameter instead
     const systemPrompt = request.messages.find(
-      (request) => request.role == "system"
+      (request) => request.role == Role.System
     )?.content;
-    // Format the request messages as the anthropic client expects it.
-    const messages = request.messages
-      .filter((request) => request.role != "system")
-      .map((request) => {
-        return {
-          role: this.roleToString(request.role),
-          content: request.content,
-        };
-      });
+    const messages = request.messages.filter(
+      (request) => request.role != Role.System
+    );
 
-    let options = {
+    let options: any = {
       model: this.config.model,
       messages: messages,
       system: systemPrompt,
       max_tokens: this.config.max_completion_tokens,
     };
 
+    if (this.isReasoningModel()) {
+      options.thinking = {
+        type: "enabled",
+        budget_tokens: this.config.reasoning_tokens,
+      };
+    }
+
+    this.logger.debug(
+      { completion_request: options },
+      "creating anthropic chat completion"
+    );
+
     const completion = await this.client.messages
       .create(options)
       .then((result) => {
+        this.logger.debug(
+          { completion_response: result },
+          "created anthropic chat completion"
+        );
+
         const textContent = result.content.find(
           (content) => content.type == "text"
         );
@@ -58,7 +75,7 @@ export class AnthropicClient implements LlmClient {
           choices: [
             {
               message: {
-                role: "assistant",
+                role: Role.Assistant,
                 content: textContent.text,
               } as TextGenerationResponseMessage,
             },
@@ -69,14 +86,17 @@ export class AnthropicClient implements LlmClient {
     return completion;
   }
 
-  private roleToString(role: Role): "user" | "assistant" {
-    switch (role) {
-      case Role.User:
-        return "user";
-      case Role.Assistant:
-        return "assistant";
-      default:
-        throw new Error(`Invalid role: ${role}`);
+  /** Returns true if the model is expected to be a reasoning model. */
+  private isReasoningModel() {
+    const reasoning_method = this.config.reasoning_method;
+
+    if (
+      reasoning_method == ReasoningMethod.ExtractThinkTagsFromMessage ||
+      reasoning_method == ReasoningMethod.ExtractThoughtContent
+    ) {
+      return true;
     }
+
+    return false;
   }
 }
