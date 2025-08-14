@@ -32,7 +32,7 @@ docker run \
 
 ## Development
 
-First, make sure you have [Bun][bun.sh] installed. If you use [`mise`][mise],
+First, make sure you have Node (v22+) installed. If you use [`mise`][mise],
 simply install it by running:
 
 ```
@@ -42,17 +42,16 @@ mise install
 Then proceed to install the project dependencies:
 
 ```
-bun install
+pnpm install
 ```
 
 Finally, you can start the client (make sure you edit `config.yaml`):
 
 ```
-bun start
+pnpm start
 ```
 
 [mise]: https://mise.jdx.dev/getting-started.html
-[bun.sh]: https://bun.sh/
 
 ## License
 
