@@ -1,25 +1,35 @@
-ARG BUN_VERSION=1.2-distroless
+ARG NODE_VERSION=22.18.0
 
-FROM oven/bun:${BUN_VERSION} AS deps
+FROM node:${NODE_VERSION}-alpine AS base
 
-# Drop privileges and become the bun user
-USER nonroot
+# Install pnpm
+RUN npm install -g pnpm
+
+# Drop privileges and become the node user
+USER node
 WORKDIR /usr/src/app
+
+FROM base AS prod-deps
 
 # Install dependencies
-COPY ./package.json ./bun.lock ./
-RUN ["bun", "install", "--frozen-lockfile", "--ignore-scripts", "--production"]
+COPY ./package.json ./pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --ignore-scripts --prod
 
-FROM oven/bun:${BUN_VERSION}
-
-# Drop privileges and become the bun user
-USER nonroot
-WORKDIR /usr/src/app
- 
-# Copy dependencies from deps stage
-COPY --from=deps /usr/src/app/node_modules ./node_modules
+FROM base AS build
 
 # Add the rest of the application
-ADD . .
+ADD --chown=node:node . .
 
-ENTRYPOINT ["bun", "run", "bin/chadgpt.js"]
+# Copy dependencies from deps stage
+COPY --from=prod-deps --chown=node:node /usr/src/app/node_modules ./node_modules
+
+RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm run build
+
+FROM base AS runner
+ 
+# Copy dependencies from deps stage
+COPY --from=prod-deps /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/build ./build
+
+ENTRYPOINT ["node", "./build/bin/chadgpt.js"]
