@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig, defaultExclude } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -6,5 +6,6 @@ export default defineConfig({
       reportsDirectory: "./.coverage",
       reporter: ["text", "lcov"],
     },
+    exclude: ["build/**", ...defaultExclude],
   },
 });
