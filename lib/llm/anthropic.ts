@@ -76,6 +76,19 @@ export class AnthropicClient implements LlmClient {
           "created anthropic chat completion",
         );
 
+        const stop_reason = result.stop_reason;
+
+        if (stop_reason == "refusal") {
+          const refusal_category = result.stop_details?.category;
+          const refusal_message = refusal_category
+            ? this.refusalCategoryReason(refusal_category)
+            : "no refusal category given, so dunno why";
+
+          throw new Error(
+            `The request was refused by the provider: ${refusal_message}`,
+          );
+        }
+
         const textContent = result.content.find(
           (content) => content.type == "text",
         );
@@ -99,6 +112,22 @@ export class AnthropicClient implements LlmClient {
       });
 
     return completion;
+  }
+
+  /** Returns a human readable reason explaining the given refusal category. */
+  private refusalCategoryReason(category: string): string {
+    switch (category) {
+      case "cyber":
+        return "The request could enable cyber harm, such as malware or exploit development. Benign cybersecurity work can also trigger this refusal.";
+      case "bio":
+        return "The request could enable biological harm, such as dangerous lab methods. Beneficial life sciences work can also trigger this refusal.";
+      case "frontier_llm":
+        return "The request could assist the development of competing AI models, which is restricted under Anthropic's commercial terms. Benign machine learning work can also trigger this refusal.";
+      case "reasoning_extraction":
+        return "The request asks the model to reproduce its internal reasoning in the response text.";
+      default:
+        return `Refusal category: ${category}`;
+    }
   }
 
   /** Returns true if the model is expected to be a reasoning model. */
