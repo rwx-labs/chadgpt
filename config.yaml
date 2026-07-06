@@ -72,13 +72,20 @@ llm:
 
   # List of messages used for instructing GPT.
   #
-  # Each message has `content` which will be templated with Mustache.
+  # Each message has `content` which will be templated with Nunjucks (Jinja 2).
   #
   # Available variables:
-  # `message` - The message a user sent to the bot (not including the bot nick)
-  # `rawMessage` - The message a user sent to the bot, including the bot nick
+  # `botGecos` - The bots "real name".
+  # `botNick` - The bots current nickname.
+  # `botUsername` - The bots ident/username.
   # `channel` - The name of the channel the message was sent in.
+  # `currentTime` - The current time as a Date.
+  # `currentTimeUtc` - The current time as a UTC string.
+  # `message` - The message a user sent to the bot (not including the bot nick)
+  # `model` - The name of the model as specified in `llm.model`.
   # `nick` - The nickname of the sender.
+  # `provider` - The name of the provider, as specified in `llm.provider`.
+  # `rawMessage` - The message a user sent to the bot, including the bot nick
   messages:
     - role: system
       content: |-
