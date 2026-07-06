@@ -3,41 +3,41 @@ name: Continuous Integration
 on:
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v5
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 10
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile --ignore-scripts
-    - name: Perform linting
-      run: pnpm lint
+      - name: Checkout source code
+        uses: actions/checkout@v7
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Perform linting
+        run: pnpm lint
 
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v5
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 10
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile --ignore-scripts
-    - name: Run tests (with coverage)
-      env:
-        OPENAI_API_KEY: 'invalid_key'
-      run: pnpm test --coverage
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        files: ./.coverage/lcov.info
+      - name: Checkout source code
+        uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Run tests (with coverage)
+        env:
+          OPENAI_API_KEY: "invalid_key"
+        run: pnpm test --coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          files: ./.coverage/lcov.info
