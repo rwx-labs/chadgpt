@@ -14,7 +14,7 @@ irc:
   version: "github.com/rwx-labs/chadgpt"
   # List of channels to join when initially connected.
   channels:
-  - "#chad"
+    - "#chad"
   # List of nicknames to ignore. You can use * to partially match nicknames,
   # e.g. `foo*` will ignore `foo`, `foobar` and `foobaz`.
   # ignored_nicks: []
@@ -42,6 +42,7 @@ llm:
   #    <answer></answer> tags and are extracted.
   # * `thinking-message` - thinking messages are extracted from messages with
   #   `type == "thinking"`
+  # * `adaptive` - anthropics new adaptive thinking
   # * `none` or false - response is preserved as is.
   # reasoning_method: none
 
@@ -79,8 +80,8 @@ llm:
   # `channel` - The name of the channel the message was sent in.
   # `nick` - The nickname of the sender.
   messages:
-  - role: system
-    content: |-
-      You are a helpful AI assistant.
-  - role: user
-    content: "{{ message }}"
+    - role: system
+      content: |-
+        You are a helpful AI assistant.
+    - role: user
+      content: "{{ message }}"
