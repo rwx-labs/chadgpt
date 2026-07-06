@@ -2,6 +2,7 @@
 .github/workflows/
 bun.lock
 pnpm-lock.yaml
+pnpm-workspace.yaml
 **/__tests__/fixtures
 config*.yaml
 README.md
