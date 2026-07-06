@@ -22,6 +22,7 @@ export enum Role {
 export enum ReasoningMethod {
   ExtractThinkTagsFromMessage = "think-answer-tags",
   ExtractThoughtContent = "thinking-message",
+  Adaptive = "adaptive",
 }
 
 export interface TextGenerationMessage {

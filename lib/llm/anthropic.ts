@@ -42,10 +42,25 @@ export class AnthropicClient implements LlmClient {
     };
 
     if (this.isReasoningModel()) {
-      options.thinking = {
-        type: "enabled",
-        budget_tokens: this.config.reasoning_tokens,
-      };
+      if (this.config.reasoning_method == ReasoningMethod.Adaptive) {
+        options.thinking = {
+          type: "adaptive",
+          display: "omitted", // FIXME: we may want to use summarized in the future
+        };
+
+        const effort = this.config.reasoning_effort;
+
+        if (this.config.reasoning_effort) {
+          options.output_config = {
+            effort,
+          };
+        }
+      } else {
+        options.thinking = {
+          type: "enabled",
+          budget_tokens: this.config.reasoning_tokens,
+        };
+      }
     }
 
     this.logger.debug(
@@ -90,13 +105,10 @@ export class AnthropicClient implements LlmClient {
   private isReasoningModel() {
     const reasoning_method = this.config.reasoning_method;
 
-    if (
+    return (
       reasoning_method == ReasoningMethod.ExtractThinkTagsFromMessage ||
-      reasoning_method == ReasoningMethod.ExtractThoughtContent
-    ) {
-      return true;
-    }
-
-    return false;
+      reasoning_method == ReasoningMethod.ExtractThoughtContent ||
+      reasoning_method == ReasoningMethod.Adaptive
+    );
   }
 }
