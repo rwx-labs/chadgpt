@@ -79,13 +79,28 @@ export class AnthropicClient implements LlmClient {
         const stop_reason = result.stop_reason;
 
         if (stop_reason == "refusal") {
-          const refusal_category = result.stop_details?.category;
-          const refusal_message = refusal_category
-            ? this.refusalCategoryReason(refusal_category)
-            : "no refusal category given, so dunno why";
+          // A refusal is a successful response, not an error, and it can
+          // arrive before any output or mid-stream. Either way the partial
+          // output is incomplete, so it is discarded here.
+          const stop_details = result.stop_details;
+
+          // The API's explanation is human-readable but not stable, so it is
+          // displayed rather than parsed. A null category is a normal,
+          // permanent value meaning the refusal did not map to a named
+          // category.
+          const refusal_message =
+            stop_details?.explanation ??
+            (stop_details?.category
+              ? this.refusalCategoryReason(stop_details.category)
+              : null);
+
+          this.logger.warn(
+            { completion_refusal: stop_details },
+            "anthropic refused the request",
+          );
 
           throw new Error(
-            `The request was refused by the provider: ${refusal_message}`,
+            `The request was refused by the provider: ${refusal_message ?? "the refusal did not map to a named category"}`,
           );
         }
 
@@ -125,6 +140,8 @@ export class AnthropicClient implements LlmClient {
         return "The request could assist the development of competing AI models, which is restricted under Anthropic's commercial terms. Benign machine learning work can also trigger this refusal.";
       case "reasoning_extraction":
         return "The request asks the model to reproduce its internal reasoning in the response text.";
+      case "general_harms":
+        return "The request falls under a usage-policy area outside the named refusal categories. Benign work can also trigger this refusal.";
       default:
         return `Refusal category: ${category}`;
     }
